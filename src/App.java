@@ -46,6 +46,9 @@ public class App extends Application
         // after rendering, fix the min size of it
         stg.setMinHeight(stg.getHeight());
         stg.setMinWidth(stg.getWidth());
+        
+        // maximize window
+        stg.setMaximized(true);
 
         System.out.println("[App] App launched");
         
