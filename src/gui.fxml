@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1200.0" style="-fx-background-color: #222;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <top>
+      <BorderPane maxWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" style="-fx-background-color: #333;" BorderPane.alignment="CENTER">
+         <right>
+            <BorderPane prefHeight="500.0" prefWidth="340.0" BorderPane.alignment="CENTER">
+               <top>
+                  <ImageView fx:id="imageViewAlpha" fitHeight="240.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </BorderPane.margin>
+                  </ImageView>
+               </top>
+               <bottom>
+                  <ImageView fx:id="imageViewBeta" fitHeight="240.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </BorderPane.margin>
+                  </ImageView>
+               </bottom>
+            </BorderPane>
+         </right>
+         <center>
+            <ImageView fx:id="imageView" fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <bottom>
+            <Label fx:id="infoLabelA" text="Press Start Camera to start rendering" textFill="WHITE" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </bottom>
+      </BorderPane>
+   </top>
+   <bottom>
+      <FlowPane alignment="CENTER" prefHeight="251.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <BorderPane maxHeight="-Infinity" prefHeight="80.0" prefWidth="250.0" style="-fx-border-color: white; -fx-border-radius: 10px;">
+               <center>
+                  <JFXButton fx:id="cameraButton" onAction="#startCamera" prefHeight="50.0" prefWidth="146.0" style="-fx-background-color: #ddd;" text="Start Camera 0" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                  </JFXButton>
+               </center>
+               <left>
+                  <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" onAction="#decreaseCamera" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ddd;" text="-" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </BorderPane.margin>
+                  </JFXButton>
+               </left>
+               <right>
+                  <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" onAction="#increaseCamera" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ddd;" text="+" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </BorderPane.margin>
+                  </JFXButton>
+               </right>
+            </BorderPane>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="110.0">
+               <top>
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderMainAction" prefHeight="40.0" prefWidth="110.0" selected="true" text="MAIN" textFill="WHITE" BorderPane.alignment="CENTER" />
+               </top>
+               <center>
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderAlphaAction" prefHeight="40.0" prefWidth="110.0" text="ALPHA" textFill="WHITE" toggleColor="#ff00ae" toggleLineColor="#d6388e" BorderPane.alignment="CENTER" />
+               </center>
+               <bottom>
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderBetaAction" prefHeight="40.0" prefWidth="110.0" text="BETA" textFill="WHITE" toggleColor="#ff006f" toggleLineColor="#dd1a65" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+         </children>
+      </FlowPane>
+   </bottom>
+</BorderPane>
