@@ -42,7 +42,7 @@ public abstract class CVFXController {
     @FXML protected ImageView imageViewMain, imageViewAlpha, imageViewBeta;
     
     // SECTION buttons
-    @FXML @AlwaysVisible protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    @FXML protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
     @FXML protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
     
     // SECTION sliders
