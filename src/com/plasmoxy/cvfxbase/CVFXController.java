@@ -11,9 +11,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
