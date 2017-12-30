@@ -2,9 +2,6 @@ MIT License
 
 Copyright (c) 2017 Plasmoxy
 
-NOTE : This license is already included in com.plasmoxy.cfxbase package. ( so just put the package in your project and use it )
-NOTE : You are free to modify code in this package to fit your application's needs.
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
