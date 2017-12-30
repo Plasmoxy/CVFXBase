@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  *  - this used jfoenix but then i just modified it to native fx node interfaces because the base is same
  */
 
-public abstract class CVFXController { // control class for gui.fxml
+public abstract class CVFXController { // control class for cvfxgui.fxml
 
     // FIELDS -- Nodes --
 

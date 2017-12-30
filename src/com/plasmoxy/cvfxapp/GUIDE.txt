@@ -3,6 +3,12 @@
 You need to have these files in your package :
     1. A class that extends CVFXApp
         - must set the fxml location with setFxmlLocation method in constructor (otherwise InvocationException is thrown at runtime)
-        -
-    1. A class that extends CVFXController
+        - must first load opencv
+        - then you can start application with launch(args) method
+
+    2. A class that extends CVFXController
         - must implement process method
+
+    3. A .fxml gui file for the app
+        => just copy the cvfxgui.fxml inside your project ( and load it's location in CVFXApp subclass )
+        ( you are free to modify it as you need )
