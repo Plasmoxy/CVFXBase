@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * CVFXController class for CVFXBase
  *
  * @author Plasmoxy
- * @version 1.0
+ * @version 1.0 BETA
  *
  * Some notes of mine :
  *  - because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null !

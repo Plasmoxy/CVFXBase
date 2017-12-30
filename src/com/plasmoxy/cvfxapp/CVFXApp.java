@@ -13,7 +13,7 @@ import java.net.URL;
  * CVFXBase OpenCV Base in JavaFX
  *
  * @author Plasmoxy
- * @version 1.0
+ * @version 1.0 BETA
  * <p>
  * How launch  :
  * - set the fxml location ( in constructor )
