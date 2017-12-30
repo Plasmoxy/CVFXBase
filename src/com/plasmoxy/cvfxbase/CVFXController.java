@@ -12,6 +12,8 @@ import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -40,7 +42,7 @@ public abstract class CVFXController {
     @FXML protected ImageView imageViewMain, imageViewAlpha, imageViewBeta;
     
     // SECTION buttons
-    @FXML protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    @FXML @AlwaysVisible protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
     @FXML protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
     
     // SECTION sliders
@@ -49,13 +51,8 @@ public abstract class CVFXController {
     
     // SECTION other
     
-    // array with node references - used to hide them and similar things
-    protected final Node[] nodes = {
-            sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG, // sliders
-            toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH, // toggle buttons
-            buttonA, buttonB, buttonC, buttonD, buttonE, buttonF, // buttons
-            sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel // slider labels
-    };
+    // array with nodes which will be hidden with hideAll method, loaded in init because its not pure java stuff
+    protected Node[] nodesToHide;
     
     @FXML protected Label infoLabel; // the label under views pane
     
@@ -69,7 +66,7 @@ public abstract class CVFXController {
 
     // flags for rendering, these get updated by action methods for the toggle buttons
     // main is active by default, just like the toggle button in fxml
-    public volatile boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
+    public boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
 
@@ -115,10 +112,19 @@ public abstract class CVFXController {
         imageViewBeta.setPreserveRatio(true);
         
         // add listeners to sliders
-        sliderA.valueProperty().addListener((observableValue, old_val, new_val) -> { sliderAChanged(old_val, new_val);});
+        sliderA.valueProperty().addListener((observableValue, old_val, new_val) -> sliderAChanged(old_val, new_val));
         
         // allocate some String objects in the infotext arraylist
         for (int i = 0; i<16; i++) infoText.add("");
+        
+        // load the node references
+        nodesToHide  = new Node[]{
+            sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG,
+                    toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH,
+                    buttonA, buttonB, buttonC, buttonD, buttonE, buttonF,
+                    sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel
+        };
+        
 
         init();
     }
@@ -143,15 +149,15 @@ public abstract class CVFXController {
         Platform.runLater(() -> infoLabel.setText( (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ") + temp.toString()));
     }
     
-    // methods for showing and hiding elements of gui <threadsafe>
+    // methods for showing and hiding elements of gui <thread unsafe>
     public void hide(Node... ns) {
-        Platform.runLater(() -> {for (Node n : ns) n.setVisible(false);}  );
+        for (Node n : ns) n.setVisible(false);
     }
     public void show(Node... ns) {
-        Platform.runLater(() -> {for (Node n : ns) n.setVisible(true);}  );
+        for (Node n : ns) n.setVisible(true);
     }
     public void hideAll() {
-        for (Node n : nodes) hide(n);
+        hide(nodesToHide);
     }
     
     
