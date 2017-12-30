@@ -1,4 +1,4 @@
-package com.plasmoxy.cvfxapp;
+package com.plasmoxy.cvfxbase;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -42,12 +42,11 @@ public abstract class CVFXApp extends Application {
     
     @Override
     public void start(Stage stg) throws IOException {
+    
+        log("Launching CVFXApp");
         
         if (fxmlLocation == null) throw new RuntimeException("ERROR : fxmlLocation resource is null !!!");
-        
         fxmlloader = new FXMLLoader(fxmlLocation);
-        
-        log("Launching CVFXApp");
         
         guiroot = fxmlloader.load();
         mainscene = new Scene(guiroot);
@@ -60,7 +59,7 @@ public abstract class CVFXApp extends Application {
         
         stg.setOnCloseRequest(event ->
         {
-            log("Received closeController signal, calling closeController on controller");
+            log("Received close signal, calling closeController on controller");
             controller.closeController();
         });
         

@@ -12,3 +12,5 @@ You need to have these files in your package :
     3. A .fxml gui file for the app
         => just copy the cvfxgui.fxml inside your project ( and load it's location in CVFXApp subclass )
         ( you are free to modify it as you need )
+
+And read the source code ;)

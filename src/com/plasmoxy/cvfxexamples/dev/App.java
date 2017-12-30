@@ -1,10 +1,12 @@
-import com.plasmoxy.cvfxapp.CVFXApp;
+package com.plasmoxy.cvfxexamples.dev;
+
+import com.plasmoxy.cvfxbase.CVFXApp;
 import org.opencv.core.Core;
 
 public class App extends CVFXApp {
     
     public App() {
-        setFxmlLocation(getClass().getResource("cvfxgui.fxml"));
+        setFxmlLocation(getClass().getResource("/com/plasmoxy/cvfxexamples/dev/cvfxgui.fxml"));
     }
     
     public static void main(String[] args) {

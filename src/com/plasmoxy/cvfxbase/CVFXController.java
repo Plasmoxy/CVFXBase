@@ -1,5 +1,6 @@
-package com.plasmoxy.cvfxapp;
+package com.plasmoxy.cvfxbase;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +13,6 @@ import org.opencv.videoio.VideoCapture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 
 /**
  * CVFXController class for CVFXBase
@@ -29,12 +29,18 @@ import java.util.concurrent.TimeUnit;
 public abstract class CVFXController { // control class for cvfxgui.fxml
 
     // FIELDS -- Nodes --
-
-    @FXML protected Button cameraButton;
+    
+    
+    // SECTION views
     @FXML protected ImageView imageViewMain; // the biggest imageViewMain
     @FXML protected ImageView imageViewAlpha; // small upper imageViewMain
     @FXML protected ImageView imageViewBeta; // small lower imageViewMain
-    @FXML protected Label infoLabelA;
+    // SECTION buttons
+    @FXML protected Button cameraButton;
+    // SECTION other
+    @FXML protected Label infoLabel; // the label under views pane
+    
+    public String infoText = "";
 
     // FIELDS -- CV --
 
@@ -42,8 +48,9 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
     protected boolean cameraActive = false;
     protected int cameraID = 0; // ID OF THE CAMERA
 
-    // use these flags in cv too
-    protected boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
+    // flags for rendering, these get updated by action methods for the toggle buttons
+    // main is active by default, just like the toggle button in fxml
+    public boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
 
@@ -69,11 +76,13 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
 
 
     };
+    
+    // METHODS -- ACCESSORS --
 
     // METHODS -- CONTROLLER --
 
-    protected void initController() { // only in package
-        System.out.println("[CVFXController] Initializing controller");
+    void initController() { // only in package
+        log("Initializing controller");
         cap = new VideoCapture();
 
         // fix imageViews so they don't resize
@@ -90,7 +99,21 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
         stopRendering();
     }
 
-    // METHODS -- FXML --
+    // METHODS -- GUI --
+    
+    private void updateStartText() {
+        cameraButton.setText("Start Camera " + String.valueOf(cameraID));
+    }
+    
+    // method to update the status info label
+    public void updateInfoLabel() {
+        Platform.runLater(() -> infoLabel.setText(
+                (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ")
+                +infoText
+        ));
+    }
+    
+    // SECTION button actions
 
     @FXML
     protected void startCamera(ActionEvent event) {
@@ -102,7 +125,7 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
                 startRendering();
                 cameraButton.setText("Stop Camera");
             } else {
-                System.err.println("Cant open camera");
+                log("CANNOT OPEN CAMERA");
                 cameraButton.setText("ERROR");
             }
 
@@ -110,10 +133,6 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
             stopRendering();
             updateStartText();
         }
-    }
-
-    protected void updateStartText() {
-        cameraButton.setText("Start Camera " + String.valueOf(cameraID));
     }
 
     @FXML
@@ -129,6 +148,8 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
         if (cameraID>0) cameraID--;
         updateStartText();
     }
+    
+    // SECTION toggle button actions
 
     @FXML
     protected void renderMainAction(ActionEvent e) {
@@ -154,7 +175,7 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
             try {
                 cap.read(frame);
             } catch (Exception ex) {
-                System.err.println("[CV] Error during image processing.");
+                log("[CV] Error during image processing.");
             }
         }
         return frame;
@@ -163,8 +184,9 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
     protected void startRendering() {
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameRenderer, 0, 33, TimeUnit.MILLISECONDS);
-        infoLabelA.setText("- Rendering active -");
-        System.out.println("[CVFXController] Rendering started");
+        
+        updateInfoLabel();
+        log("Rendering started");
     }
 
     protected void stopRendering() {
@@ -178,9 +200,10 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
                 e.printStackTrace();
             }
         }
-
-        infoLabelA.setText("- Rendering stopped -");
-        System.out.println("[CVFXController] Rendering stopped");
+        
+        updateInfoLabel();
+        
+        log("Rendering stopped");
 
         if (cap.isOpened()) cap.release();
     }
@@ -190,5 +213,12 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
     // process the frame here
     // frames - imageViewMain, imageViewAlpha, imageViewBeta
     protected abstract void process(Mat f, Mat a, Mat b);
+    
+    
+    // METHODS -- OTHER --
+    
+    protected void log(String text) {
+        System.out.println("[CVFXController] " + text);
+    }
 
 }
