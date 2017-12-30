@@ -6,7 +6,7 @@ import org.opencv.core.Core;
 public class App extends CVFXApp {
     
     public App() {
-        setFxmlLocation(getClass().getResource("/com/plasmoxy/cvfxexamples/dev/cvfxgui.fxml"));
+    
     }
     
     public static void main(String[] args) {

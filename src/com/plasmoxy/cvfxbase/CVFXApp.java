@@ -25,12 +25,19 @@ public abstract class CVFXApp extends Application {
     
     // FIELDS -- FX --
     
-    private URL fxmlLocation;
+    private URL fxmlLocation = getClass().getResource("cvfxgui.fxml");
+    private String controllerCanonicalName = ""; // TODO : implement controller loading in code
     
     protected FXMLLoader fxmlloader;
     protected Parent guiroot;
     protected Scene mainscene;
     protected CVFXController controller;
+    
+    // METHODS -- MISC --
+    
+    public void setControllerClass(Class<CVFXController> controllerClass) {
+        controllerCanonicalName = controllerClass.getCanonicalName();
+    }
     
     // METHODS -- ACCESSORS --
     
@@ -48,10 +55,21 @@ public abstract class CVFXApp extends Application {
         if (fxmlLocation == null) throw new RuntimeException("ERROR : fxmlLocation resource is null !!!");
         fxmlloader = new FXMLLoader(fxmlLocation);
         
+        // instantiate controller by getting the correct class using classloader
+        try {
+            controller = (CVFXController) ClassLoader.getSystemClassLoader().loadClass("com.plasmoxy.cvfxexamples.dev.Controller").newInstance();
+        } catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
+            System.err.println(" --- FATAL INTERNAL ERROR in classloading ---");
+            ex.printStackTrace();
+        }
+    
+        log("Loaded controller : " + controller.getClass().getCanonicalName());
+        
+        fxmlloader.setController(controller);
+        
+        
         guiroot = fxmlloader.load();
         mainscene = new Scene(guiroot);
-        
-        controller = fxmlloader.getController();
         
         stg.setScene(mainscene);
         stg.sizeToScene();
