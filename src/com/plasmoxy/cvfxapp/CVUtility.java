@@ -1,3 +1,5 @@
+package com.plasmoxy.cvfxapp;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
@@ -32,7 +34,7 @@ public final class CVUtility {
 
     // effective Mat to BufferedImage converter
     private static BufferedImage matToBufferedImage(Mat original) {
-        // init
+        // initController
         BufferedImage image = null;
         int width = original.width(), height = original.height(), channels = original.channels();
         byte[] sourcePixels = new byte[width * height * channels];
