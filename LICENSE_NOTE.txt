@@ -1,0 +1,2 @@
+The license is already included in com.plasmoxy.cfxbase package. ( so just put the package in your project and use it )
+You are free to modify code in this package to fit your application's needs.
