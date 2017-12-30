@@ -3,13 +3,17 @@ package com.plasmoxy.cvfxbase;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,23 +28,38 @@ import java.util.concurrent.TimeUnit;
  *  - because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null !
  *      ( it was a big bug in my code )
  *  - this used jfoenix but then i just modified it to native fx node interfaces because the base is same
+ *      ( so you can but dont have to use jfoenix or any other fxml library )
  */
 
-public abstract class CVFXController { // control class for cvfxgui.fxml
+public abstract class CVFXController {
 
-    // FIELDS -- Nodes --
-    
+    // FIELDS -- FXML Nodes --
     
     // SECTION views
-    @FXML protected ImageView imageViewMain; // the biggest imageViewMain
-    @FXML protected ImageView imageViewAlpha; // small upper imageViewMain
-    @FXML protected ImageView imageViewBeta; // small lower imageViewMain
+    // alpha = smaller upper view, beta = smaller lower view
+    @FXML protected ImageView imageViewMain, imageViewAlpha, imageViewBeta;
+    
     // SECTION buttons
-    @FXML protected Button cameraButton;
+    @FXML protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    @FXML protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
+    
+    // SECTION sliders
+    @FXML protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
+    @FXML protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
+    
     // SECTION other
+    
+    // array with node references - used to hide them and similar things
+    protected final Node[] nodes = {
+            sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG, // sliders
+            toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH, // toggle buttons
+            buttonA, buttonB, buttonC, buttonD, buttonE, buttonF, // buttons
+            sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel // slider labels
+    };
+    
     @FXML protected Label infoLabel; // the label under views pane
     
-    public String infoText = "";
+    public List<String> infoText = new ArrayList<>();
 
     // FIELDS -- CV --
 
@@ -50,7 +69,7 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
 
     // flags for rendering, these get updated by action methods for the toggle buttons
     // main is active by default, just like the toggle button in fxml
-    public boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
+    public volatile boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
 
@@ -81,9 +100,11 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
 
     // METHODS -- CONTROLLER --
 
+    // internal init
     void initController() { // only in package
         log("Initializing controller");
-        cap = new VideoCapture();
+        
+        cap = new VideoCapture(); // create new capture object
 
         // fix imageViews so they don't resize
         imageViewMain.setFitWidth(640);
@@ -92,8 +113,18 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
         imageViewAlpha.setPreserveRatio(true);
         imageViewBeta.setFitWidth(320);
         imageViewBeta.setPreserveRatio(true);
+        
+        // add listeners to sliders
+        sliderA.valueProperty().addListener((observableValue, old_val, new_val) -> { sliderAChanged(old_val, new_val);});
+        
+        // allocate some String objects in the infotext arraylist
+        for (int i = 0; i<16; i++) infoText.add("");
 
+        init();
     }
+    
+    // external additional init
+    protected abstract void init();
 
     protected void closeController() { // external
         stopRendering();
@@ -107,16 +138,40 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
     
     // method to update the status info label
     public void updateInfoLabel() {
-        Platform.runLater(() -> infoLabel.setText(
-                (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ")
-                +infoText
-        ));
+        StringBuilder temp = new StringBuilder();
+        for (String s : infoText) temp.append(s);
+        Platform.runLater(() -> infoLabel.setText( (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ") + temp.toString()));
     }
     
-    // SECTION button actions
+    // methods for showing and hiding elements of gui <threadsafe>
+    public void hide(Node... ns) {
+        Platform.runLater(() -> {for (Node n : ns) n.setVisible(false);}  );
+    }
+    public void show(Node... ns) {
+        Platform.runLater(() -> {for (Node n : ns) n.setVisible(true);}  );
+    }
+    public void hideAll() {
+        for (Node n : nodes) hide(n);
+    }
+    
+    
+    // SECTION slider handling
+    // these methods are called in initController method
+    // they can be overridden, but don't have to be...
+    
+    protected void sliderAChanged(Number oldVal, Number newVal) {}
+    
+    // SECTION button handling
+    
+    @FXML protected void buttonAPressed() {}
+    @FXML protected void buttonBPressed() {}
+    @FXML protected void buttonCPressed() {}
+    @FXML protected void buttonDPressed() {}
+    @FXML protected void buttonEPressed() {}
+    @FXML protected void buttonFPressed() {}
 
     @FXML
-    protected void startCamera(ActionEvent event) {
+    private void startCamera() {
         if (!cameraActive) {
             cap.open(cameraID);
 
@@ -136,35 +191,49 @@ public abstract class CVFXController { // control class for cvfxgui.fxml
     }
 
     @FXML
-    protected void increaseCamera(ActionEvent e) {
+    private void increaseCamera() {
         if (cameraActive) stopRendering();
         cameraID++;
         updateStartText();
     }
 
     @FXML
-    protected void decreaseCamera(ActionEvent e) {
+    private void decreaseCamera() {
         if (cameraActive) stopRendering();
         if (cameraID>0) cameraID--;
         updateStartText();
     }
     
-    // SECTION toggle button actions
+    // SECTION toggle button handling
 
-    @FXML
-    protected void renderMainAction(ActionEvent e) {
+    @FXML private void renderMainAction(ActionEvent e) {
         renderMainActive = ((ToggleButton)e.getSource()).isSelected();
     }
-
-    @FXML
-    protected void renderAlphaAction(ActionEvent e) {
+    @FXML private void renderAlphaAction(ActionEvent e) {
         renderAlphaActive = ((ToggleButton)e.getSource()).isSelected();
     }
-
-    @FXML
-    protected void renderBetaAction(ActionEvent e) {
+    @FXML private void renderBetaAction(ActionEvent e) {
         renderBetaActive = ((ToggleButton)e.getSource()).isSelected();
     }
+    
+    @FXML private void toggleAAction() {toggleAChanged(toggleA.isSelected());}
+    @FXML private void toggleBAction() {toggleBChanged(toggleB.isSelected());}
+    @FXML private void toggleCAction() {toggleCChanged(toggleC.isSelected());}
+    @FXML private void toggleDAction() {toggleDChanged(toggleD.isSelected());}
+    @FXML private void toggleEAction() {toggleEChanged(toggleE.isSelected());}
+    @FXML private void toggleFAction() {toggleFChanged(toggleF.isSelected());}
+    @FXML private void toggleGAction() {toggleGChanged(toggleG.isSelected());}
+    @FXML private void toggleHAction() {toggleHChanged(toggleH.isSelected());}
+    
+    // can but don't have to be overridden
+    protected void toggleAChanged(boolean selected) {}
+    protected void toggleBChanged(boolean selected) {}
+    protected void toggleCChanged(boolean selected) {}
+    protected void toggleDChanged(boolean selected) {}
+    protected void toggleEChanged(boolean selected) {}
+    protected void toggleFChanged(boolean selected) {}
+    protected void toggleGChanged(boolean selected) {}
+    protected void toggleHChanged(boolean selected) {}
 
     // METHODS -- CV --
 

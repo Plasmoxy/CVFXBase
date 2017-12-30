@@ -1,5 +1,7 @@
 --- Guide to CVFXBase source code by Plasmoxy ---
 
+README at https://github.com/Plasmoxy
+
 You need to have these files in your package :
     1. A class that extends CVFXApp
         - must set the fxml location with setFxmlLocation method in constructor (otherwise InvocationException is thrown at runtime)
