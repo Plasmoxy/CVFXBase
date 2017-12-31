@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  *
  * This class is instantiated externally, NOT in fxml.
  *
- * @author Plasmoxy
+ * @author <a href="https://github.io/Plasmoxy">Plasmoxy ( Sebastian Petrik )</a>
  * @version 1.2
  *
  * Some notes of mine :
@@ -43,36 +43,64 @@ public abstract class CVFXController {
     // FIELDS -- FXML Nodes --
     
     // SECTION views
-    // alpha = smaller upper view, beta = smaller lower view
+    /**
+     *  FXML Image views for the 3 OpenCV Mats
+     */
     @FXML protected ImageView imageViewMain, imageViewAlpha, imageViewBeta;
     
     // SECTION buttons
+    /**
+     * Button for starting camera
+     */
     @FXML protected Button cameraButton;
+    
+    /**
+     * User modifiable Buttons for program functionality
+     */
     @FXML @Hidable protected Button buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    
+    /**
+     * User modifiable ToggleButtons
+     */
     @FXML @Hidable protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
     
     // SECTION sliders
+    
+    /**
+     * User modifiable Sliders
+     */
     @FXML @Hidable protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
+    
+    /**
+     * User modifiable Slider Labels
+     *
+     * These get detected by reflection and hidden/shown automatically together with their Slider with hide() and show()
+     */
     @FXML protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
-    // -> slider labels are detected and hidden together with their slider in methods hide() and show()
     
     // SECTION other
     
-    // array with nodes which will be hidden with hideAll method, loaded in init using reflection
-    protected LinkedList<Node> nodesToHide = new LinkedList<>();
+    /**
+     * Array with nodes which will be hidden with hideAll method, loaded in init using reflection
+     */
+    private LinkedList<Node> nodesToHide = new LinkedList<>();
     
+    /**
+     * User modifiable label with info.
+     * This is dependent on infoText List and gets updated by updateInfoLabel() method
+     */
     @FXML protected Label infoLabel; // the label under views pane
-    public List<String> infoText = new ArrayList<>(); // list with some strings which get concatenated in infoLabel
+    private List<String> infoText = new ArrayList<>(); // list with some strings which get concatenated in infoLabel
 
     // FIELDS -- CV --
 
-    protected VideoCapture cap;
-    protected boolean cameraActive = false;
+    private VideoCapture videoCapture;
+    private boolean cameraActive = false;
     private int cameraID = 0; // ID OF THE CAMERA
 
     // flags for rendering, these get updated by action methods for the toggle buttons
     // main is active by default, just like the toggle button in fxml
-    public boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
+    private boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
 
@@ -103,16 +131,52 @@ public abstract class CVFXController {
     
     private boolean loggingActive = true;
     
+    // METHODS -- CONSTRUCTORS --
+    
+    // first, do some pure specific java stuff
+    public CVFXController() {
+        // allocate some String objects in the infotext arraylist (32 is pretty much enough (its too much lol))
+        for (int i = 0; i<32; i++) infoText.add("");
+    }
+    
     // METHODS -- ACCESSORS --
     public void setLoggingActive(boolean active) {loggingActive = active;}
     public boolean isLoggingActive() {return loggingActive;}
     
+    public VideoCapture getVideoCapture() { return videoCapture; }
+    public boolean isCameraActive() { return cameraActive; }
+    
+    public boolean isRenderMainActive() { return renderMainActive; }
+    public boolean isRenderAlphaActive() { return renderAlphaActive; }
+    public boolean isRenderBetaActive() { return renderBetaActive; }
+    
+    public void setRenderMainActive(boolean active) { renderMainActive = active; }
+    public void setRenderAlphaActive(boolean active) { renderAlphaActive = active; }
+    public void setRenderBetaActive(boolean active) { renderBetaActive = active; }
+    
     // only to be called in init !!!
     protected void setCameraID(int id) {
         cameraID = id < 0 ? 0 : id;
-        updateStartText();
+        updateStartButtonText();
     }
     public int getCameraID() { return cameraID;}
+    
+    public void setInfoText(int position, String text) {
+        if (position < 32) {
+            infoText.set(position, text);
+        } else {
+            log("LOGIC ERROR : You cant set a text field higher than 31 !");
+        }
+    }
+    
+    public String getInfoText(int position) {
+        if (position < 32) {
+            return infoText.get(position);
+        } else {
+            log("LOGIC ERROR : There is no such text field.");
+            return "ERROR";
+        }
+    }
 
     // METHODS -- CONTROLLER --
 
@@ -120,7 +184,7 @@ public abstract class CVFXController {
     void initController() { // only in package
         log("Initializing controller");
         
-        cap = new VideoCapture(); // create new capture object
+        videoCapture = new VideoCapture(); // create new capture object
 
         // fix imageViews so they don't resize
         imageViewMain.setFitWidth(640);
@@ -138,9 +202,6 @@ public abstract class CVFXController {
         sliderE.valueProperty().addListener((observableValue, old_val, new_val) -> sliderEChanged(old_val, new_val));
         sliderF.valueProperty().addListener((observableValue, old_val, new_val) -> sliderFChanged(old_val, new_val));
         sliderG.valueProperty().addListener((observableValue, old_val, new_val) -> sliderGChanged(old_val, new_val));
-        
-        // allocate some String objects in the infotext arraylist
-        for (int i = 0; i<16; i++) infoText.add("");
         
         // load node references which should be hidden using java reflection
         // this code works with annotations and is quite complicated
@@ -180,7 +241,7 @@ public abstract class CVFXController {
 
     // METHODS -- GUI --
     
-    private void updateStartText() {
+    private void updateStartButtonText() {
         cameraButton.setText("Start Camera " + String.valueOf(cameraID));
     }
     
@@ -249,9 +310,9 @@ public abstract class CVFXController {
     @FXML
     private void startCamera() {
         if (!cameraActive) {
-            cap.open(cameraID);
+            videoCapture.open(cameraID);
 
-            if (cap.isOpened()) {
+            if (videoCapture.isOpened()) {
                 cameraActive = true;
                 startRendering();
                 cameraButton.setText("Stop Camera");
@@ -262,7 +323,7 @@ public abstract class CVFXController {
 
         } else {
             stopRendering();
-            updateStartText();
+            updateStartButtonText();
         }
     }
 
@@ -270,14 +331,14 @@ public abstract class CVFXController {
     private void increaseCamera() {
         if (cameraActive) stopRendering();
         cameraID++;
-        updateStartText();
+        updateStartButtonText();
     }
 
     @FXML
     private void decreaseCamera() {
         if (cameraActive) stopRendering();
         if (cameraID>0) cameraID--;
-        updateStartText();
+        updateStartButtonText();
     }
     
     // SECTION toggle button handling
@@ -316,9 +377,9 @@ public abstract class CVFXController {
     // grab mat from video capture
     protected Mat grabFrame() {
         Mat frame = new Mat(); // empty mat
-        if (cap.isOpened()) {
+        if (videoCapture.isOpened()) {
             try {
-                cap.read(frame);
+                videoCapture.read(frame);
             } catch (Exception ex) {
                 log("[CV] Error during image processing.");
             }
@@ -350,7 +411,7 @@ public abstract class CVFXController {
         
         log("Rendering stopped");
 
-        if (cap.isOpened()) cap.release();
+        if (videoCapture.isOpened()) videoCapture.release();
     }
     
     // METHODS -- SPECIFIC --

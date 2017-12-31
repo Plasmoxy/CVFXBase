@@ -45,13 +45,13 @@ public class Controller extends CVFXController {
         }
     }
     
-    // SECTION handlijg
+    // SECTION handling
     
     @Override
     protected void sliderAChanged(Number oldVal, Number newVal) {
         if (showSliderState) {
             sliderVal = newVal.doubleValue();
-            infoText.set(0, "Slider = " + newVal.toString());
+            setInfoText(0, "Slider = " + newVal.toString());
             updateInfoLabel();
         }
     }
