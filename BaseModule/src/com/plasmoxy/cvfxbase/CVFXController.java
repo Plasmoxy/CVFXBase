@@ -90,20 +90,29 @@ public abstract class CVFXController {
      * This is dependent on infoText List and gets updated by updateInfoLabel() method
      */
     @FXML protected Label infoLabel; // the label under views pane
+    
+    /**
+     * List with Strings which get together contanetated in updateInfoLabel()
+     */
     private List<String> infoText = new ArrayList<>(); // list with some strings which get concatenated in infoLabel
 
     // FIELDS -- CV --
-
+    
     private VideoCapture videoCapture;
     private boolean cameraActive = false;
     private int cameraID = 0; // ID OF THE CAMERA
-
-    // flags for rendering, these get updated by action methods for the toggle buttons
-    // main is active by default, just like the toggle button in fxml
+    
+    /**
+     * Flags for rendering, these get updated by action methods for the three rendering toggle buttons.
+     * Main is active by default, just like the toggle button in fxml.
+     */
     private boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
-
+    
+    /**
+     * This ExecutorService updates the views at 30 FPS
+     */
     private ScheduledExecutorService timer;
     private Runnable frameRenderer = () -> {
         Mat frame = grabFrame(), frameAlpha = new Mat(), frameBeta = new Mat(); // grab frame from camera
