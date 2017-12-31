@@ -1,4 +1,4 @@
-package com.plasmoxy.cvfxexamples.dev;
+package com.plasmoxy.cvfxexamples.circle;
 
 import com.plasmoxy.cvfxbase.CVFXController;
 import org.opencv.core.Mat;

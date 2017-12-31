@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
  *      ( so you can but dont have to use jfoenix or any other fxml library )
  *  - getClass() called anywhere apparently returns the highest inherited subclass of specified instance
  *  - to get type of field, use getType() on Field instance instead -> getClass() returns Field.class
+ *
  */
 
 public abstract class CVFXController {
@@ -129,8 +130,14 @@ public abstract class CVFXController {
         imageViewBeta.setFitWidth(320);
         imageViewBeta.setPreserveRatio(true);
         
-        // TODO : add listeners to sliders
+        // add listeners to sliders
         sliderA.valueProperty().addListener((observableValue, old_val, new_val) -> sliderAChanged(old_val, new_val));
+        sliderB.valueProperty().addListener((observableValue, old_val, new_val) -> sliderBChanged(old_val, new_val));
+        sliderC.valueProperty().addListener((observableValue, old_val, new_val) -> sliderCChanged(old_val, new_val));
+        sliderD.valueProperty().addListener((observableValue, old_val, new_val) -> sliderDChanged(old_val, new_val));
+        sliderE.valueProperty().addListener((observableValue, old_val, new_val) -> sliderEChanged(old_val, new_val));
+        sliderF.valueProperty().addListener((observableValue, old_val, new_val) -> sliderFChanged(old_val, new_val));
+        sliderG.valueProperty().addListener((observableValue, old_val, new_val) -> sliderGChanged(old_val, new_val));
         
         // allocate some String objects in the infotext arraylist
         for (int i = 0; i<16; i++) infoText.add("");
@@ -223,6 +230,12 @@ public abstract class CVFXController {
     // they can be overridden, but don't have to be...
     
     protected void sliderAChanged(Number oldVal, Number newVal) {}
+    protected void sliderBChanged(Number oldVal, Number newVal) {}
+    protected void sliderCChanged(Number oldVal, Number newVal) {}
+    protected void sliderDChanged(Number oldVal, Number newVal) {}
+    protected void sliderEChanged(Number oldVal, Number newVal) {}
+    protected void sliderFChanged(Number oldVal, Number newVal) {}
+    protected void sliderGChanged(Number oldVal, Number newVal) {}
     
     // SECTION button handling
     
