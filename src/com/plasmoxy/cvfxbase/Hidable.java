@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// annotation for fields which should be hidden by hideAll by default
+// mark annotation for fields which should be hidden by hideAll by default
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

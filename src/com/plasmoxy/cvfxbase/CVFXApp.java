@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.opencv.core.Mat;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,8 +14,8 @@ import java.net.URL;
  * CVFXBase OpenCV Base in JavaFX
  *
  * @author Plasmoxy
- * @version 1.0 BETA
- * <p>
+ * @version 1.2
+ *
  * How launch  :
  * - set the fxml location ( in constructor )
  * - load opencv before launching
@@ -25,7 +26,8 @@ public abstract class CVFXApp extends Application {
     
     // FIELDS -- FX --
     
-    private URL fxmlLocation = getClass().getResource("cvfxgui.fxml");
+    // get absolute CVFXApp class and load resource
+    private URL fxmlLocation = CVFXApp.class.getResource("cvfxgui.fxml");
     private String controllerCanonicalName = ""; // TODO : implement controller loading in code
     
     protected FXMLLoader fxmlloader;
@@ -33,14 +35,17 @@ public abstract class CVFXApp extends Application {
     protected Scene mainscene;
     protected CVFXController controller;
     
-    // METHODS -- MISC --
+    // FIELDS -- SPECIFIC --
+    private boolean loggingActive = true;
     
-    public void setControllerClass(Class<CVFXController> controllerClass) {
-        controllerCanonicalName = controllerClass.getCanonicalName();
-    }
+    // METHODS -- MISC --
     
     // METHODS -- ACCESSORS --
     
+    public void setLoggingActive(boolean active) {loggingActive = active;}
+    public boolean isLoggingActive() {return loggingActive;}
+    
+    // call this before onAppStarted() ( in constructor of subclass )
     protected void setFxmlLocation(URL f) {
         fxmlLocation = f;
     }
@@ -52,8 +57,20 @@ public abstract class CVFXApp extends Application {
     
         log("Launching CVFXApp");
         
-        if (fxmlLocation == null) throw new RuntimeException("ERROR : fxmlLocation resource is null !!!");
+        // check if OpenCV is loaded
+        try {
+            new Mat();
+        } catch(UnsatisfiedLinkError e) {
+            System.err.println("FATAL ERROR - OpenCV not loaded !");
+            System.exit(-1);
+        }
+        
+        // test if fxml there is fxml defined
+        if (fxmlLocation == null) {
+            throw new RuntimeException("FATAL ERROR : fxmlLocation URL is null !!!");
+        }
         fxmlloader = new FXMLLoader(fxmlLocation);
+        log("Loaded fxml : " + fxmlLocation.getPath());
         
         // instantiate controller by getting the correct class using classloader
         // TODO : get that class by CVFXApp subclass annotation
@@ -62,6 +79,7 @@ public abstract class CVFXApp extends Application {
         } catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
             System.err.println(" --- FATAL INTERNAL ERROR in classloading ---");
             ex.printStackTrace();
+            System.out.println(-1);
         }
     
         log("Loaded controller : " + controller.getClass().getCanonicalName());
@@ -104,9 +122,12 @@ public abstract class CVFXApp extends Application {
         log("CVFXApp stopped");
     }
     
+    // run code after rendering
+    protected abstract void onAppStarted();
+    
     // METHODS -- Other --
     
     protected void log(String text) {
-        System.out.println("[CVFXApp] " + text);
+        if (loggingActive) System.out.println("[CVFXApp] " + text);
     }
 }

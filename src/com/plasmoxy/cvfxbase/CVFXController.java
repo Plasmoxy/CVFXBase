@@ -23,8 +23,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * CVFXController class for CVFXBase
  *
+ * This class is instantiated externally, NOT in fxml.
+ *
  * @author Plasmoxy
- * @version 1.0 BETA
+ * @version 1.2
  *
  * Some notes of mine :
  *  - because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null !
@@ -50,7 +52,8 @@ public abstract class CVFXController {
     
     // SECTION sliders
     @FXML @Hidable protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
-    @FXML @Hidable protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
+    @FXML protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
+    // -> slider labels are detected and hidden together with their slider in methods hide() and show()
     
     // SECTION other
     
@@ -64,7 +67,7 @@ public abstract class CVFXController {
 
     protected VideoCapture cap;
     protected boolean cameraActive = false;
-    protected int cameraID = 0; // ID OF THE CAMERA
+    private int cameraID = 0; // ID OF THE CAMERA
 
     // flags for rendering, these get updated by action methods for the toggle buttons
     // main is active by default, just like the toggle button in fxml
@@ -95,7 +98,20 @@ public abstract class CVFXController {
 
     };
     
+    // FIELDS -- SPECIFIC --
+    
+    private boolean loggingActive = true;
+    
     // METHODS -- ACCESSORS --
+    public void setLoggingActive(boolean active) {loggingActive = active;}
+    public boolean isLoggingActive() {return loggingActive;}
+    
+    // only to be called in init !!!
+    protected void setCameraID(int id) {
+        cameraID = id < 0 ? 0 : id;
+        updateStartText();
+    }
+    public int getCameraID() { return cameraID;}
 
     // METHODS -- CONTROLLER --
 
@@ -135,6 +151,7 @@ public abstract class CVFXController {
                         nodesToHide.add((Node)f.get(this));
                     } catch (IllegalAccessException e) {
                         System.out.println("FATAL INTERNAL ERROR - Node field not accessible by reflection");
+                        System.exit(-1);
                     }
                 }
             }
@@ -167,12 +184,32 @@ public abstract class CVFXController {
         Platform.runLater(() -> infoLabel.setText( (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ") + temp.toString()));
     }
     
+    // small utility method used below
+    private void setVisibleDetected(Node n, boolean visible) {
+        if ( Slider.class.isAssignableFrom(n.getClass())) {
+            n.setVisible(visible);
+            try {
+                // grab a label field of slider, construct node from this instance and set its visibility
+                ((Node)CVFXController.class.getDeclaredField(n.getId() + "Label").get(this)).setVisible(visible);
+            } catch(NoSuchFieldException|IllegalAccessException ex) {
+                System.out.println("FATAL INTERNAL ERROR : slider filed has no label field in code : " + n.getId());
+                System.exit(-1);
+            }
+        } else {
+            n.setVisible(visible);
+        }
+    }
+    
     // methods for showing and hiding elements of gui <thread unsafe>
     public void hide(Node... ns) {
-        for (Node n : ns) n.setVisible(false);
+        for (Node n : ns) {
+            setVisibleDetected(n, false);
+        }
     }
     public void show(Node... ns) {
-        for (Node n : ns) n.setVisible(true);
+        for (Node n : ns) {
+            setVisibleDetected(n, true);
+        }
     }
     public void hideAll() {
         for (Node n : nodesToHide) {
@@ -313,7 +350,7 @@ public abstract class CVFXController {
     // METHODS -- OTHER --
     
     protected void log(String text) {
-        System.out.println("[CVFXController] " + text);
+        if (loggingActive) System.out.println("[CVFXController] " + text);
     }
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- FXML layout for CVFXApp by Plasmoxy, made in Gluon designer -->
-<!-- NOTE : Controller is assigned through code so no fx:controller attribute is present -->
+<!-- IMPORTANT NOTE : Controller is assigned through code so no fx:controller attribute is present -->
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXSlider?>
@@ -105,7 +105,10 @@
                <children>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderALabel" prefHeight="17.0" text="sliderA" textFill="WHITE" />
+                        <Label fx:id="sliderALabel" prefHeight="17.0" text="sliderA" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderA" />
                      </children>
                      <opaqueInsets>
@@ -117,7 +120,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderBLabel" prefHeight="17.0" text="sliderB" textFill="WHITE" />
+                        <Label fx:id="sliderBLabel" prefHeight="17.0" text="sliderB" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderB" />
                      </children>
                      <opaqueInsets>
@@ -129,7 +135,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderCLabel" prefHeight="17.0" text="sliderC" textFill="WHITE" />
+                        <Label fx:id="sliderCLabel" prefHeight="17.0" text="sliderC" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderC" />
                      </children>
                      <opaqueInsets>
@@ -141,7 +150,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderDLabel" prefHeight="17.0" text="sliderD" textFill="WHITE" />
+                        <Label fx:id="sliderDLabel" prefHeight="17.0" text="sliderD" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderD" />
                      </children>
                      <opaqueInsets>
@@ -153,7 +165,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderELabel" prefHeight="17.0" text="sliderE" textFill="WHITE" />
+                        <Label fx:id="sliderELabel" prefHeight="17.0" text="sliderE" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderE" />
                      </children>
                      <opaqueInsets>
@@ -165,7 +180,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderFLabel" prefHeight="17.0" text="slliderF" textFill="WHITE" />
+                        <Label fx:id="sliderFLabel" prefHeight="17.0" text="sliderF" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderF" />
                      </children>
                      <opaqueInsets>
@@ -177,7 +195,10 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Label fx:id="sliderGLabel" prefHeight="17.0" text="sliderG" textFill="WHITE" />
+                        <Label fx:id="sliderGLabel" prefHeight="17.0" text="sliderG" textFill="WHITE">
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding></Label>
                         <JFXSlider fx:id="sliderG" />
                      </children>
                      <opaqueInsets>

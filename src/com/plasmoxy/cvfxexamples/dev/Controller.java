@@ -8,26 +8,44 @@ import org.opencv.imgproc.Imgproc;
 
 public class Controller extends CVFXController {
     
-    private boolean showSliderState;
+    private boolean showSliderState, drawCircle;
     private double sliderVal;
     
     @Override
     protected void init() {
-        log("Controller init");
+        setCameraID(1);
         
         // show only used nodes
         hideAll();
-        show(buttonA, buttonB, sliderA, sliderALabel);
+        show(buttonA, buttonB, toggleA); // slider is off by default
         
         buttonA.setText("Circle ON");
         buttonB.setText("Circle OFF");
-        sliderALabel.setText("CIRCLE");
+        toggleA.setText("Draw Circle");
+        sliderALabel.setText("Circle Radius");
+        sliderA.setValue(0);
     }
+    
+    // SECTION logic
     
     @Override
     protected void process(Mat f, Mat a, Mat b) {
-        Imgproc.circle(f, new Point(640/2, 480/2), (int)sliderVal, new Scalar(0, 255, 0), 2);
+        if(drawCircle) Imgproc.circle(f, new Point(640/2, 480/2), (int)sliderVal, new Scalar(0, 255, 0), 2);
     }
+    
+    private void setCircleOn(boolean state) { // circle on or off
+        drawCircle = state;
+        if (state) {
+            show(sliderA);
+            showSliderState = true;
+            sliderVal = sliderA.valueProperty().get(); // update value from slider
+        } else {
+            hide(sliderA);
+            showSliderState = false;
+        }
+    }
+    
+    // SECTION handlijg
     
     @Override
     protected void sliderAChanged(Number oldVal, Number newVal) {
@@ -39,13 +57,20 @@ public class Controller extends CVFXController {
     }
     
     @Override
+    protected void toggleAChanged(boolean selected) {
+        setCircleOn(selected);
+    }
+    
+    @Override
     protected void buttonAPressed() {
-        showSliderState = true;
+        setCircleOn(true);
+        toggleA.setSelected(true);
     }
     
     @Override
     protected void buttonBPressed() {
-        showSliderState = false;
+        setCircleOn(false);
+        toggleA.setSelected(false);
     }
     
 }
