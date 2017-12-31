@@ -142,16 +142,33 @@ public abstract class CVFXController {
     
     // METHODS -- CONSTRUCTORS --
     
-    // first, do some pure specific java stuff
+    /**
+     *  Internal constructor for this superclass
+     *  It just adds the strings to infoText List
+     */
     public CVFXController() {
         // allocate some String objects in the infotext arraylist (32 is pretty much enough (its too much lol))
         for (int i = 0; i<32; i++) infoText.add("");
     }
     
     // METHODS -- ACCESSORS --
+    
+    /**
+     * Sets the log function will print to standard output ( Sets the logging ).
+     * @param active
+     */
     public void setLoggingActive(boolean active) {loggingActive = active;}
+    
+    /**
+     * Returns boolean whether the logging is active.
+     * @return
+     */
     public boolean isLoggingActive() {return loggingActive;}
     
+    /**
+     *
+     * @return
+     */
     public VideoCapture getVideoCapture() { return videoCapture; }
     public boolean isCameraActive() { return cameraActive; }
     
