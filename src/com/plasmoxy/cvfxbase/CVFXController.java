@@ -11,7 +11,10 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,8 +29,10 @@ import java.util.concurrent.TimeUnit;
  * Some notes of mine :
  *  - because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null !
  *      ( it was a big bug in my code )
- *  - this used jfoenix but then i just modified it to native fx node interfaces because the base is same
+ *  - this used jfoenix but then i just modified it to native fx node classes because the base is same
  *      ( so you can but dont have to use jfoenix or any other fxml library )
+ *  - getClass() called anywhere apparently returns the highest inherited subclass of specified instance
+ *  - to get type of field, use getType() on Field instance instead -> getClass() returns Field.class
  */
 
 public abstract class CVFXController {
@@ -39,21 +44,21 @@ public abstract class CVFXController {
     @FXML protected ImageView imageViewMain, imageViewAlpha, imageViewBeta;
     
     // SECTION buttons
-    @FXML protected Button cameraButton, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
-    @FXML protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
+    @FXML protected Button cameraButton;
+    @FXML @Hidable protected Button buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    @FXML @Hidable protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
     
     // SECTION sliders
-    @FXML protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
-    @FXML protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
+    @FXML @Hidable protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
+    @FXML @Hidable protected Label sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel;
     
     // SECTION other
     
-    // array with nodes which will be hidden with hideAll method, loaded in init because its not pure java stuff
-    protected Node[] nodesToHide;
+    // array with nodes which will be hidden with hideAll method, loaded in init using reflection
+    protected LinkedList<Node> nodesToHide = new LinkedList<>();
     
     @FXML protected Label infoLabel; // the label under views pane
-    
-    public List<String> infoText = new ArrayList<>();
+    public List<String> infoText = new ArrayList<>(); // list with some strings which get concatenated in infoLabel
 
     // FIELDS -- CV --
 
@@ -108,19 +113,32 @@ public abstract class CVFXController {
         imageViewBeta.setFitWidth(320);
         imageViewBeta.setPreserveRatio(true);
         
-        // add listeners to sliders
+        // TODO : add listeners to sliders
         sliderA.valueProperty().addListener((observableValue, old_val, new_val) -> sliderAChanged(old_val, new_val));
         
         // allocate some String objects in the infotext arraylist
         for (int i = 0; i<16; i++) infoText.add("");
         
-        // load the node references
-        nodesToHide  = new Node[]{
-            sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG,
-                    toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH,
-                    buttonA, buttonB, buttonC, buttonD, buttonE, buttonF,
-                    sliderALabel, sliderBLabel, sliderCLabel, sliderDLabel, sliderELabel, sliderFLabel, sliderGLabel
-        };
+        // load node references which should be hidden using java reflection
+        // this code works with annotations and is quite complicated
+        
+        // using CVFXController absolute class ( no need for relativity stuff like getClass())
+        // this is metacode ( code processes the code )
+        for (Field f : CVFXController.class.getDeclaredFields()) { // getDeclared because we need fields only in this class and we need private
+            
+            // to determine if f type is a Node, we check if Node can be casted (assigned) from this type
+            if (Node.class.isAssignableFrom(f.getType())) {
+                
+                // if this Node is Hidable, add it to nodesToHide list
+                if (f.isAnnotationPresent(Hidable.class)) {
+                    try {
+                        nodesToHide.add((Node)f.get(this));
+                    } catch (IllegalAccessException e) {
+                        System.out.println("FATAL INTERNAL ERROR - Node field not accessible by reflection");
+                    }
+                }
+            }
+        }
         
 
         init();
@@ -128,6 +146,9 @@ public abstract class CVFXController {
     
     // external additional init
     protected abstract void init();
+    
+    // init after app is displayed
+    protected void initAfterShow() {}
 
     protected void closeController() { // external
         stopRendering();
@@ -154,7 +175,9 @@ public abstract class CVFXController {
         for (Node n : ns) n.setVisible(true);
     }
     public void hideAll() {
-        hide(nodesToHide);
+        for (Node n : nodesToHide) {
+            hide(n);
+        }
     }
     
     
@@ -228,7 +251,7 @@ public abstract class CVFXController {
     @FXML private void toggleGAction() {toggleGChanged(toggleG.isSelected());}
     @FXML private void toggleHAction() {toggleHChanged(toggleH.isSelected());}
     
-    // can but don't have to be overridden
+    // - Methods for primitive usage -, can but don't have to be overridden
     protected void toggleAChanged(boolean selected) {}
     protected void toggleBChanged(boolean selected) {}
     protected void toggleCChanged(boolean selected) {}

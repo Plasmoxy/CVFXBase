@@ -1,10 +1,6 @@
 package com.plasmoxy.cvfxexamples.dev;
 
 import com.plasmoxy.cvfxbase.CVFXController;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.scene.control.ToggleButton;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;

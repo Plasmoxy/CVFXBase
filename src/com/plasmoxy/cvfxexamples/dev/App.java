@@ -6,7 +6,6 @@ import org.opencv.core.Core;
 public class App extends CVFXApp {
     
     public App() {
-    
     }
     
     public static void main(String[] args) {

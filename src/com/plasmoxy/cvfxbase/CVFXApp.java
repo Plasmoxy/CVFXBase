@@ -56,6 +56,7 @@ public abstract class CVFXApp extends Application {
         fxmlloader = new FXMLLoader(fxmlLocation);
         
         // instantiate controller by getting the correct class using classloader
+        // TODO : get that class by CVFXApp subclass annotation
         try {
             controller = (CVFXController) ClassLoader.getSystemClassLoader().loadClass("com.plasmoxy.cvfxexamples.dev.Controller").newInstance();
         } catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
@@ -84,12 +85,15 @@ public abstract class CVFXApp extends Application {
         controller.initController(); // tell the controller to initialize itself now
         stg.show(); // render the stage
         
-        // after rendering, fix the min size of it
+        // after rendering, fix the minimal size of it ( by the time this executes, the window is still in normal size )
         stg.setMinHeight(stg.getHeight());
         stg.setMinWidth(stg.getWidth());
         
-        // maximize window
+        // maximize window after fixing the min size
         stg.setMaximized(true);
+        
+        // now after everything is rendered, call optional controller init
+        controller.initAfterShow();
         
         log("CVFXApp launched");
         
