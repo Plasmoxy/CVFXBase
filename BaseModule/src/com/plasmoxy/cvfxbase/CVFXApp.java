@@ -1,6 +1,8 @@
 package com.plasmoxy.cvfxbase;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import java.net.URL;
 
 /**
  * Base abstract class of JavaFX application for CVFXBase.
+ * Uses OpenCV and JFoenix libraries.
  * Subclass of this is the core of a CVFXBase project
  *
  * <p>
@@ -36,6 +39,9 @@ public abstract class CVFXApp extends Application {
      * Version of the app.
      */
     public static final String VERSION = "v1.3";
+
+    // if this produces error, you dont have jfoenix library included !!!
+    private static com.jfoenix.controls.JFXButton _JFOENIX_DETECTOR;
     
     // FIELDS -- FX --
     

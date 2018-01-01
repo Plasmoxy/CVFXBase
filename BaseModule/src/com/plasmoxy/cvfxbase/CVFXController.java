@@ -121,7 +121,7 @@ public abstract class CVFXController {
     private boolean renderMainActive = true, renderAlphaActive, renderBetaActive;
 
     // FIELDS -- Render --
-    
+
     /**
      * This ExecutorService updates the views at 30 FPS
      */
