@@ -31,35 +31,67 @@ import java.net.URL;
 public abstract class CVFXApp extends Application {
     
     // FIELDS -- META --
-    
+    /**
+     * Version of the app.
+     */
     public static final String VERSION = "v1.2";
     
     // FIELDS -- FX --
     
-    // get absolute CVFXApp class and load resource
+    /**
+     * Relative fxml file path in package.
+     */
     private URL fxmlLocation = CVFXApp.class.getResource("cvfxgui.fxml");
     
-    protected FXMLLoader fxmlloader;
+    /** Loader for fxml */
+    private FXMLLoader fxmlloader;
+    
+    /** Root of gui */
     protected Parent guiroot;
+    
+    /** Main scene of app */
     protected Scene mainscene;
+    
+    /** Controller reference, gets initialized when app starts from class which is annotated in subclass */
     protected CVFXController controller;
+    
+    /** The main app stage */
     protected Stage appstage;
     
     // FIELDS -- SPECIFIC --
+    
+    /** Logging active in app class */
     private boolean loggingActive = true;
     
     // METHODS -- MISC --
     
     // METHODS -- ACCESSORS --
     
+    /**
+     * Sets if logging in app is active
+     * @param active loggingActive
+     */
     public void setLoggingActive(boolean active) {loggingActive = active;}
+    
+    /**
+     * Determines whether logging is active
+     * @return logging active
+     */
     public boolean isLoggingActive() {return loggingActive;}
     
-    // call this before onAppStarted() ( in constructor of subclass )
+    /**
+     * Sets an external fxml. DO NOT USE THIS UNLESS YOU WANT YOUR OWN GUI.
+     * @param f gui URL
+     */
     protected void setFxmlLocation(URL f) {
         fxmlLocation = f;
     }
     
+    /**
+     * Force set title if appstage is initialized.
+     * Just in case if you are not ok with the annotated title
+     * @param title the title which has to be changed
+     */
     protected void setStageTitle(String title) {
         if(appstage == null) System.out.println("ERROR : Stage not yet initialized.");
         else appstage.setTitle(title);
@@ -67,6 +99,11 @@ public abstract class CVFXApp extends Application {
     
     // METHODS -- FX --
     
+    /**
+     * Setups and starts the app and then initializes controller, do not override.
+     * @param stg stage param
+     * @throws IOException If there is a problem loading fxml
+     */
     @Override
     public void start(Stage stg) throws IOException {
         
@@ -163,16 +200,25 @@ public abstract class CVFXApp extends Application {
         
     }
     
+    /**
+     * Gets called when app is stopped.
+     */
     @Override
     public void stop() {
         log("CVFXApp stopped");
     }
     
-    // run code after rendering
+    /**
+     * Override method - executes after app has started.
+     */
     protected abstract void onAppStarted();
     
     // METHODS -- Other --
     
+    /**
+     * Check logging activity and logs stuff internally.
+     * @param text String to log.
+     */
     protected void log(String text) {
         if (loggingActive) System.out.println("[CVFXApp] " + text);
     }

@@ -411,30 +411,67 @@ public abstract class CVFXController {
     // SECTION slider handling
     // these methods are called in initController method
     // they can be overridden, but don't have to be...
-    /** This method executes, when sliderA changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderA changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderAChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderB changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderB changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderBChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderC changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderC changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderCChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderD changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderD changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderDChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderE changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderE changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderEChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderF changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderF changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderFChanged(Number oldVal, Number newVal) {}
-    /** This method executes, when sliderG changes (use newVal to get value and process it ) */
+    /**
+     * Executes when sliderG changes
+     * @param oldVal older value
+     * @param newVal new updated value
+     */
     protected void sliderGChanged(Number oldVal, Number newVal) {}
     
     // SECTION button handling
     
+    /** Executes when buttonA is pressed */
     @FXML protected void buttonAPressed() {}
+    /** Executes when buttonB is pressed */
     @FXML protected void buttonBPressed() {}
+    /** Executes when buttonC is pressed */
     @FXML protected void buttonCPressed() {}
+    /** Executes when buttonD is pressed */
     @FXML protected void buttonDPressed() {}
+    /** Executes when buttonE is pressed */
     @FXML protected void buttonEPressed() {}
+    /** Executes when buttonF is pressed */
     @FXML protected void buttonFPressed() {}
-
+    
+    /**
+     * Starts the videoCapture and starts rendering.
+     */
     @FXML
     private void startCamera() {
         if (!cameraActive) {
@@ -454,14 +491,20 @@ public abstract class CVFXController {
             updateStartButtonText();
         }
     }
-
+    
+    /**
+     * Increases camera ID.
+     */
     @FXML
     private void increaseCamera() {
         if (cameraActive) stopRendering();
         cameraID++;
         updateStartButtonText();
     }
-
+    
+    /**
+     * Decreases camera ID.
+     */
     @FXML
     private void decreaseCamera() {
         if (cameraActive) stopRendering();
@@ -470,39 +513,95 @@ public abstract class CVFXController {
     }
     
     // SECTION toggle button handling
-
+    
+    /**
+     * Toggle render button for MAIN view - called in fxml
+     * @param e Event called by fxml.
+     */
     @FXML private void renderMainAction(ActionEvent e) {
         renderMainActive = ((ToggleButton)e.getSource()).isSelected();
     }
+    
+    /**
+     * Toggle render button for ALPHA view - called in fxml
+     * @param e Event called by fxml.
+     */
     @FXML private void renderAlphaAction(ActionEvent e) {
         renderAlphaActive = ((ToggleButton)e.getSource()).isSelected();
     }
+    
+    /**
+     * Toggle render button for BETA view - called in fxml
+     * @param e Event called by fxml.
+     */
     @FXML private void renderBetaAction(ActionEvent e) {
         renderBetaActive = ((ToggleButton)e.getSource()).isSelected();
     }
     
+    /** Internal toggle action */
     @FXML private void toggleAAction() {toggleAChanged(toggleA.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleBAction() {toggleBChanged(toggleB.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleCAction() {toggleCChanged(toggleC.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleDAction() {toggleDChanged(toggleD.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleEAction() {toggleEChanged(toggleE.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleFAction() {toggleFChanged(toggleF.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleGAction() {toggleGChanged(toggleG.isSelected());}
+    /** Internal toggle action */
     @FXML private void toggleHAction() {toggleHChanged(toggleH.isSelected());}
     
-    // - Methods for primitive usage -, can but don't have to be overridden
+    /**
+     * Executes when toggleA changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleAChanged(boolean selected) {}
+    /**
+     * Executes when toggleB changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleBChanged(boolean selected) {}
+    /**
+     * Executes when toggleC changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleCChanged(boolean selected) {}
+    /**
+     * Executes when toggleD changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleDChanged(boolean selected) {}
+    /**
+     * Executes when toggleE changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleEChanged(boolean selected) {}
+    /**
+     * Executes when toggleF changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleFChanged(boolean selected) {}
+    /**
+     * Executes when toggleG changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleGChanged(boolean selected) {}
+    /**
+     * Executes when toggleH changes.
+     * @param selected Tells if the toggle button is selected.
+     */
     protected void toggleHChanged(boolean selected) {}
 
     // METHODS -- CV --
-
-    // grab mat from video capture
+    
+    /**
+     * Grab a frame from the capture.
+     * @return frame Mat
+     */
     private Mat grabFrame() {
         Mat frame = new Mat(); // empty mat
         if (videoCapture.isOpened()) {
@@ -514,7 +613,10 @@ public abstract class CVFXController {
         }
         return frame;
     }
-
+    
+    /**
+     * Starts rendering.
+     */
     private void startRendering() {
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameRenderer, 0, 33, TimeUnit.MILLISECONDS);
@@ -522,7 +624,10 @@ public abstract class CVFXController {
         updateInfoLabel();
         log("Rendering started");
     }
-
+    
+    /**
+     * Stops rendering and releases the video capture device.
+     */
     private void stopRendering() {
         cameraActive = false;
 
@@ -543,14 +648,24 @@ public abstract class CVFXController {
     }
     
     // METHODS -- SPECIFIC --
-
-    // process the frame here
-    // frames - imageViewMain, imageViewAlpha, imageViewBeta
-    protected abstract void process(Mat f, Mat a, Mat b);
+    
+    /**
+     * This important method gets called on render of every frame.
+     * Put your opencv code here ( you have all 3 Mats to work with ).
+     * @param mainframe frame which gets rendered in MAIN view
+     * @param alphaframe frame which gets rendered in ALPHA view
+     * @param betaframe frame which gets rendered in BETA view
+     */
+    protected abstract void process(Mat mainframe, Mat alphaframe, Mat betaframe);
     
     
     // METHODS -- OTHER --
     
+    /**
+     * This method is used internally for logging and you can use it too.
+     * It checks if logging is active and then prints stuff.
+     * @param text text to log
+     */
     protected void log(String text) {
         if (loggingActive) System.out.println("[CVFXController] " + text);
     }
