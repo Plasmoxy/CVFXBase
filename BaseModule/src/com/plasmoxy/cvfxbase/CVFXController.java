@@ -69,19 +69,22 @@ public abstract class CVFXController {
     /**
      * User modifiable Buttons for program functionality
      */
-    @FXML @Hidable protected Button buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
+    @FXML @Hideable
+	protected Button buttonA, buttonB, buttonC, buttonD, buttonE, buttonF;
     
     /**
      * User modifiable ToggleButtons
      */
-    @FXML @Hidable protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
+    @FXML @Hideable
+	protected ToggleButton toggleA, toggleB, toggleC, toggleD, toggleE, toggleF, toggleG, toggleH;
     
     // SECTION sliders
     
     /**
      * User modifiable Sliders
      */
-    @FXML @Hidable protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
+    @FXML @Hideable
+	protected Slider sliderA, sliderB, sliderC, sliderD, sliderE, sliderF, sliderG;
     
     /**
      * User modifiable Slider Labels
@@ -274,7 +277,7 @@ public abstract class CVFXController {
      * This method internally initializes the controller.
      * It is called internally from the CVFXApp instance.
      * It creates the videoCapture object, links listeners,sets the sizes of views and similar.
-     * It also parses the fields and checks for fields with @Hidable annotation and adds them to nodesToHide List.
+     * It also parses the fields and checks for fields with @Hideable annotation and adds them to nodesToHide List.
      *
      * This method is used only in package and mustn't be overridden.
      */
@@ -310,8 +313,8 @@ public abstract class CVFXController {
             // to determine if f type is a Node, we check if Node can be casted (assigned) from this type
             if (Node.class.isAssignableFrom(f.getType())) {
                 
-                // if this Node is Hidable, add it to nodesToHide list
-                if (f.isAnnotationPresent(Hidable.class)) {
+                // if this Node is Hideable, add it to nodesToHide list
+                if (f.isAnnotationPresent(Hideable.class)) {
                     try {
                         nodesToHide.add((Node)f.get(this));
                     } catch (IllegalAccessException e) {
@@ -409,7 +412,7 @@ public abstract class CVFXController {
     }
     
     /**
-     * Hides all user modifiable elements - only internal elements marked with @Hidable annotation
+     * Hides all user modifiable elements - only internal elements marked with @Hideable annotation
      */
     public void hideAll() {
         for (Node n : nodesToHide) {
