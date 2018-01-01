@@ -196,9 +196,6 @@ public abstract class CVFXApp extends Application {
         stg.setMinHeight(stg.getHeight());
         stg.setMinWidth(stg.getWidth());
         
-        // maximize window after fixing the min size
-        stg.setMaximized(true);
-        
         // now after everything is rendered, call optional controller init
         controller.initAfterShow();
         
