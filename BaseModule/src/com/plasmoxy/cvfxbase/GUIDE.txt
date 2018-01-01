@@ -1,8 +1,0 @@
---- Guide to CVFXBase  by Plasmoxy ---
-@version 1.2
-
-README at https://github.com/Plasmoxy
-
-Currently no guide just look at the examples.
-
-And read the source code ;)

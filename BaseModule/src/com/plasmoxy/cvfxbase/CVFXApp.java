@@ -12,16 +12,20 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 
 /**
- * CVFXBase OpenCV Base in JavaFX
+ * Base abstract class of JavaFX application for CVFXBase.
+ * Subclass of this is the core of a CVFXBase project
  *
- * @author Plasmoxy
- * @version 1.2
+ * <p>
+ * How to setup a CVFXBase app :
+ * <ol>
+ *  <li>extend this and CVFXController class</li>
+ *  <li>in subclass of this add @ControllerClass annotation to main constructor ( non-parameter ) and put controller class in this annotation</li>
+ *  <li>load opencv before launching</li>
+ *  <li>call launch(args) on subclass of this</li>
+ * </ol>
  *
- * How launch :
- * - extend this and CVFXController class
- * - in subclass of this add @ControllerClass annotation to main constructor ( non-parameter ) and put controller class in this annotation
- * - load opencv before launching
- * - call launch(args) on subclass of this
+ *  @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
+ *  @version 1.2
  */
 
 public abstract class CVFXApp extends Application {

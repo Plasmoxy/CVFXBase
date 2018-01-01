@@ -10,13 +10,22 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
 /**
- * Useful methods for OpenCV by Plasmoxy.
+ * Useful methods for OpenCV.
  * Some methods from Luigi De Russis and his tutorial.
+ *
+ * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
+ * @version 1.2
  */
 
 public final class CVUtility {
-
-    // convert mat to javafx Image
+    
+    /**
+     * Converts and OpenCV Mat to JavaFX Image
+     *
+     * Dependent on matToBufferedImage method
+     * @param frame the opencv Mat
+     * @return javafx image
+     */
     public static Image mat2Image(Mat frame) {
         try {
             return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
@@ -24,15 +33,25 @@ public final class CVUtility {
             return null;
         }
     }
-
-    // generic method which sets property on FX thread ( from non-fx thread )
+    
+    /**
+     * Generic method which sets a JavaFX property on FX Thread through Platform.runLater
+     *
+     * @param property Property which is set.
+     * @param value Value of the property.
+     * @param <T> Type of value.
+     */
     public static <T> void setProperty(final ObjectProperty<T> property, final T value) {
         Platform.runLater(() -> {
             property.set(value);
         });
     }
-
-    // effective Mat to BufferedImage converter
+    
+    /**
+     * Effective converter from OpenCV mat to BufferedImage
+     * @param original OpenCV Mat
+     * @return converted BufferedImage
+     */
     private static BufferedImage matToBufferedImage(Mat original) {
         // initController
         BufferedImage image = null;

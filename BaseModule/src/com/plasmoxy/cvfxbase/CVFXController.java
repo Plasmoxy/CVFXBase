@@ -21,20 +21,22 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * CVFXController class for CVFXBase
+ * Abstract controller class with all the logic of OpenCV and stuff.
+ * This class is instantiated externally using CVFXApp instance, NOT in fxml.
  *
- * This class is instantiated externally, NOT in fxml.
+ * <p>
+ * My notes which are not important to the user :
+ * <ul>
+ *     <li>because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null
+ *  ( it was a big bug in my code )</li>
+ *     <li>this used jfoenix but then i just modified it to native fx node classes because the base is same
+ *  ( so you can but dont have to use jfoenix or any other fxml library )</li>
+ *     <li>getClass() called anywhere apparently returns the highest inherited subclass of specified instance</li>
+ *     <li>to get type of field, use getType() on Field instance instead, getClass() returns Field.class</li>
+ * </ul>
  *
- * @author <a href="https://github.io/Plasmoxy">Plasmoxy ( Sebastian Petrik )</a>
+ * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
  * @version 1.2
- *
- * Some notes of mine :
- *  - because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null !
- *      ( it was a big bug in my code )
- *  - this used jfoenix but then i just modified it to native fx node classes because the base is same
- *      ( so you can but dont have to use jfoenix or any other fxml library )
- *  - getClass() called anywhere apparently returns the highest inherited subclass of specified instance
- *  - to get type of field, use getType() on Field instance instead -> getClass() returns Field.class
  *
  */
 
@@ -155,46 +157,98 @@ public abstract class CVFXController {
     
     /**
      * Sets the log function will print to standard output ( Sets the logging ).
-     * @param active
+     * @param active logging active
      */
     public void setLoggingActive(boolean active) {loggingActive = active;}
     
     /**
      * Returns boolean whether the logging is active.
-     * @return
+     * @return logging active
      */
     public boolean isLoggingActive() {return loggingActive;}
     
     /**
-     *
-     * @return
+     *  Returns the OpenCV capture object
+     * @return videoCapture
      */
     public VideoCapture getVideoCapture() { return videoCapture; }
+    
+    /**
+     *  Gets camera active boolean.
+     * @return cameraActive
+     */
     public boolean isCameraActive() { return cameraActive; }
     
+    /**
+     * Determines whether the Main view is rendered.
+     * @return renderMainActive
+     */
     public boolean isRenderMainActive() { return renderMainActive; }
+    
+    /**
+     * Determines whether the Alpha view is rendered.
+     * @return renderAlphaActive
+     */
     public boolean isRenderAlphaActive() { return renderAlphaActive; }
+    
+    /**
+     * Determines whether the Beta view is rendered.
+     * @return renderBetaActive
+     */
     public boolean isRenderBetaActive() { return renderBetaActive; }
     
+    /**
+     * Sets the render active state of Main view
+     * @param active renderMainActive
+     */
     public void setRenderMainActive(boolean active) { renderMainActive = active; }
+    
+    /**
+     * Sets the render active state of ALpha view
+     * @param active renderAlphaActive
+     */
     public void setRenderAlphaActive(boolean active) { renderAlphaActive = active; }
+    
+    /**
+     * Sets the render active state of Beta view
+     * @param active renderBetaActive
+     */
     public void setRenderBetaActive(boolean active) { renderBetaActive = active; }
     
-    // only to be called in init !!!
+    /**
+     *  Sets the camera id ( cannot be lower than zero ). Use this only in init method !
+     * @param id Camera id.
+     */
     protected void setCameraID(int id) {
         cameraID = id < 0 ? 0 : id;
         updateStartButtonText();
     }
+    
+    /**
+     * Gets the camera id.
+     * @return cameraID
+     */
     public int getCameraID() { return cameraID;}
     
+    /**
+     * Sets a String text in infoText List and updates the info label with updateInfoLabel() method
+     * @param position The text field number/position
+     * @param text The actual text string which should be set.
+     */
     public void setInfoText(int position, String text) {
         if (position < 32) {
             infoText.set(position, text);
         } else {
             log("LOGIC ERROR : You cant set a text field higher than 31 !");
         }
+        updateInfoLabel(); // TODO : ?
     }
     
+    /**
+     * Returns the text of a infoText list by given position
+     * @param position The position/number of the text field
+     * @return The text string.
+     */
     public String getInfoText(int position) {
         if (position < 32) {
             return infoText.get(position);
@@ -205,8 +259,15 @@ public abstract class CVFXController {
     }
 
     // METHODS -- CONTROLLER --
-
-    // internal init
+    
+    /**
+     * This method internally initializes the controller.
+     * It is called internally from the CVFXApp instance.
+     * It creates the videoCapture object, links listener,sets the sizes of views and similar.
+     * It also parses the fields and checks for fields with @Hidable annotation and adds them to nodesToHide List.
+     *
+     * This method is used only in package and mustn't be overridden.
+     */
     void initController() { // only in package
         log("Initializing controller");
         
@@ -255,30 +316,53 @@ public abstract class CVFXController {
         init();
     }
     
-    // external additional init
+    /**
+     * The abstract initialization method, has to be overridden in subclass.
+     * By the time this method is called, all the fx stuff should be already initialized.
+     *
+     * USE THIS METHOD AS A MAIN METHOD IN YOUR CVFXBase PROJECT ( respectively, instead of controller constructor )
+     * ( although feel free add your own constructor, but the superclass constructor must me called )
+     */
     protected abstract void init();
     
-    // init after app is displayed
+    /**
+     * This is an another initialization method.
+     * It is called when the JavaFX Stage is shown (resp. rendered).
+     * This method isn't mandatory.
+     */
     protected void initAfterShow() {}
-
+    
+    /**
+     * Gets called by App when it's closing.
+     * It stops the rendering ( and closes the capture device )
+     */
     protected void closeController() { // external
         stopRendering();
     }
 
     // METHODS -- GUI --
     
+    /**
+     * Updates the start button text ( dependent on cameraID )
+     */
     private void updateStartButtonText() {
         cameraButton.setText("Start Camera " + String.valueOf(cameraID));
     }
     
-    // method to update the status info label
+    /**
+     * Updates the info label ( concatenates the Strings in infoText field )
+     */
     public void updateInfoLabel() {
         StringBuilder temp = new StringBuilder();
         for (String s : infoText) temp.append(s);
         Platform.runLater(() -> infoLabel.setText( (cameraActive ? "[ Rendering Active ] " : "[ Rendering stopped ] ") + temp.toString()));
     }
     
-    // small utility method used below
+    /**
+     * Visibility utility method for show and hide methods - automatic label hiding/showing for sliders
+     * @param n Node to change visibility
+     * @param visible visible
+     */
     private void setVisibleDetected(Node n, boolean visible) {
         if ( Slider.class.isAssignableFrom(n.getClass())) {
             n.setVisible(visible);
@@ -294,17 +378,29 @@ public abstract class CVFXController {
         }
     }
     
-    // methods for showing and hiding elements of gui <thread unsafe>
-    public void hide(Node... ns) {
-        for (Node n : ns) {
+    /**
+     * Hides an user modifiable element (node) in GUI.
+     * @param nodes Varargs with nodes which should be hidden.
+     */
+    public void hide(Node... nodes) {
+        for (Node n : nodes) {
             setVisibleDetected(n, false);
         }
     }
-    public void show(Node... ns) {
-        for (Node n : ns) {
+    
+    /**
+     * Shows an user modifiable element (node) in GUI.
+     * @param nodes Varargs with nodes which should be shown.
+     */
+    public void show(Node... nodes) {
+        for (Node n : nodes) {
             setVisibleDetected(n, true);
         }
     }
+    
+    /**
+     * Hides all user modifiable elements - only internal elements marked with @Hidable annotation
+     */
     public void hideAll() {
         for (Node n : nodesToHide) {
             hide(n);
@@ -315,13 +411,19 @@ public abstract class CVFXController {
     // SECTION slider handling
     // these methods are called in initController method
     // they can be overridden, but don't have to be...
-    
+    /** This method executes, when sliderA changes (use newVal to get value and process it ) */
     protected void sliderAChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderB changes (use newVal to get value and process it ) */
     protected void sliderBChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderC changes (use newVal to get value and process it ) */
     protected void sliderCChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderD changes (use newVal to get value and process it ) */
     protected void sliderDChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderE changes (use newVal to get value and process it ) */
     protected void sliderEChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderF changes (use newVal to get value and process it ) */
     protected void sliderFChanged(Number oldVal, Number newVal) {}
+    /** This method executes, when sliderG changes (use newVal to get value and process it ) */
     protected void sliderGChanged(Number oldVal, Number newVal) {}
     
     // SECTION button handling
@@ -401,7 +503,7 @@ public abstract class CVFXController {
     // METHODS -- CV --
 
     // grab mat from video capture
-    protected Mat grabFrame() {
+    private Mat grabFrame() {
         Mat frame = new Mat(); // empty mat
         if (videoCapture.isOpened()) {
             try {
@@ -413,7 +515,7 @@ public abstract class CVFXController {
         return frame;
     }
 
-    protected void startRendering() {
+    private void startRendering() {
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameRenderer, 0, 33, TimeUnit.MILLISECONDS);
         
@@ -421,7 +523,7 @@ public abstract class CVFXController {
         log("Rendering started");
     }
 
-    protected void stopRendering() {
+    private void stopRendering() {
         cameraActive = false;
 
         if (timer != null && !timer.isShutdown()) {

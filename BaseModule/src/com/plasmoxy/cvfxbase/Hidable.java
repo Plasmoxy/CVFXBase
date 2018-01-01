@@ -5,8 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// mark annotation for fields which should be hidden by hideAll by default
-
+/**
+ * This annotation marks fields which should be hidden by hideAll by default.
+ *
+ * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
+ * @version 1.2
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Hidable {}
