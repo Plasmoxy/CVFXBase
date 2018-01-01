@@ -19,13 +19,14 @@ import java.net.URL;
  * How to setup a CVFXBase app :
  * <ol>
  *  <li>extend this and CVFXController class</li>
- *  <li>in subclass of this add @ControllerClass annotation to main constructor ( non-parameter ) and put controller class in this annotation</li>
+ *  <li>in subclass of this add @ControllerClass annotation to main constructor ( non-parameter constructor ) and put controller class in this annotation</li>
+ *  <li>also add @AppTitle annotation to the constructor and with your app name string parameter</li>
  *  <li>load opencv before launching</li>
- *  <li>call launch(args) on subclass of this</li>
+ *  <li>call launch(args) on subclass of this ( through main for example )</li>
  * </ol>
  *
  *  @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- *  @version 1.2
+ *  @version 1.3
  */
 
 public abstract class CVFXApp extends Application {
@@ -34,7 +35,7 @@ public abstract class CVFXApp extends Application {
     /**
      * Version of the app.
      */
-    public static final String VERSION = "v1.2";
+    public static final String VERSION = "v1.3";
     
     // FIELDS -- FX --
     

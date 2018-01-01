@@ -14,7 +14,7 @@ import java.awt.image.DataBufferByte;
  * Some methods from Luigi De Russis and his tutorial.
  *
  * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- * @version 1.2
+ * @version 1.3
  */
 
 public final class CVUtility {

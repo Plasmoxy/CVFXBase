@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  * Annotation which sets the app title. Annotate your CVFXApp subclass' controller with it.
  *
  * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- * @version 1.2
  */
 @Target(ElementType.CONSTRUCTOR)
 @Retention(RetentionPolicy.RUNTIME)

@@ -25,6 +25,16 @@ import java.util.concurrent.TimeUnit;
  * This class is instantiated externally using CVFXApp instance, NOT in fxml.
  *
  * <p>
+ * How to use this class :
+ * <ul>
+ *     <li>extend this class to create your controller class</li>
+ *     <li>in the subclass, override methods init and process methods</li>
+ *     <li>in init method you can do element hiding, set texts of buttons/labels, set default camera id, set default value of sliders, etc...</li>
+ *     <li>in process method you can work with opencv images, this method gets executed
+ *     on every single frame.</li>
+ *     <li>you can override methods slider?Changed, toggle?Changed and button?Changed to run code when there is user input</li>
+ * </ul>
+ * <p>
  * My notes which are not important to the user :
  * <ul>
  *     <li>because Mat is native object, null check doesn't work, always initialize it with new Mat() instead of null
@@ -36,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * </ul>
  *
  * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- * @version 1.2
+ * @version 1.3
  *
  */
 
@@ -241,7 +251,7 @@ public abstract class CVFXController {
         } else {
             log("LOGIC ERROR : You cant set a text field higher than 31 !");
         }
-        updateInfoLabel(); // TODO : ?
+        updateInfoLabel();
     }
     
     /**
@@ -263,7 +273,7 @@ public abstract class CVFXController {
     /**
      * This method internally initializes the controller.
      * It is called internally from the CVFXApp instance.
-     * It creates the videoCapture object, links listener,sets the sizes of views and similar.
+     * It creates the videoCapture object, links listeners,sets the sizes of views and similar.
      * It also parses the fields and checks for fields with @Hidable annotation and adds them to nodesToHide List.
      *
      * This method is used only in package and mustn't be overridden.
