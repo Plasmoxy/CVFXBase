@@ -14,10 +14,10 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 
 /**
- * Base abstract class of JavaFX application for CVFXBase.
- * Uses OpenCV and JFoenix libraries.
- * Subclass of this is the core of a CVFXBase project
- * IMPORTANT : if you don't call the launch(args) method, the app will hang and do nothing
+ * Base abstract class of JavaFX application for CVFXBase.<br>
+ * Uses OpenCV and JFoenix libraries.<br>
+ * Subclass of this is the core of a CVFXBase project<br>
+ * IMPORTANT : if you don't call the launch(args) method, the app will hang and do nothing<br>
  *
  * <p>
  * How to setup a CVFXBase app :
