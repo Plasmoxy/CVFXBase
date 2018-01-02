@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- FXML layout for CVFXApp by Plasmoxy, made in Gluon designer -->
-<!-- version: 1.4 -->
+<!-- version: 1.4.1 -->
 <!-- IMPORTANT NOTE : Controller is assigned through code so no fx:controller attribute is present -->
 
 <?import com.jfoenix.controls.JFXButton?>

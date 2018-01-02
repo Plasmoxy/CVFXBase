@@ -29,7 +29,7 @@ import java.net.URL;
  * </ol>
  *
  *  @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- *  @version 1.4
+ *  @version 1.4.1
  */
 
 public abstract class CVFXApp extends Application {
@@ -116,7 +116,7 @@ public abstract class CVFXApp extends Application {
         
         log("Launching CVFXApp");
         appstage = stg; // set the stage reference to a field
-        
+
         // check if OpenCV is loaded
         try {
             new Mat();
@@ -172,6 +172,9 @@ public abstract class CVFXApp extends Application {
         
         // set this controller instance as controller for the fxml
         fxmlloader.setController(controller);
+
+        // link stage in controller
+        controller.appstage = appstage;
         
         // load fxml and setup gui
         

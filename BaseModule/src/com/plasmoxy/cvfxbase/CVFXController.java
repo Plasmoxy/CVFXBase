@@ -10,6 +10,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -47,14 +48,21 @@ import java.util.concurrent.TimeUnit;
  * </ul>
  *
  * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- * @version 1.4
+ * @version 1.4.1
  *
  */
 
 public abstract class CVFXController {
 
     // FIELDS -- FXML Nodes --
-    
+
+    // SECTION app
+
+    /**
+     * FXML Stage reference from app class, loaded when app starts, IMPORTANT : if you want to use this in process method, use Platform.runLater because it is another thread
+     */
+    protected Stage appstage;
+
     // SECTION views
     /**
      *  FXML Image views for the 3 OpenCV Mats
@@ -168,7 +176,7 @@ public abstract class CVFXController {
     }
     
     // METHODS -- ACCESSORS --
-    
+
     /**
      * Sets the log function will print to standard output ( Sets the logging ).
      * @param active logging active
