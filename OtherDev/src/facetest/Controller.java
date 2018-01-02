@@ -2,13 +2,14 @@ package facetest;
 
 import com.plasmoxy.cvfxbase.CVFXController;
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
 
-public class Controller extends CVFXController{
+public class Controller extends CVFXController {
 
 	private int absoluteFaceSize;
 	private CascadeClassifier faceCascade = new CascadeClassifier(), eyeCascade = new CascadeClassifier();
@@ -16,8 +17,8 @@ public class Controller extends CVFXController{
 
 	@Override
 	protected void init() {
-		faceCascade.load("C:\\QUICKLIB\\opencv301\\build\\etc\\haarcascades\\haarcascade_frontalface_alt.xml");
-		eyeCascade.load("C:\\QUICKLIB\\opencv301\\build\\etc\\haarcascades\\haarcascade_eye.xml");
+		faceCascade.load(System.getProperty("user.dir") + "/haarcascade_frontalface_alt.xml");
+		eyeCascade.load(System.getProperty("user.dir") + "/haarcascade_eye.xml");
 
 		toggleA.setText("Detect face");
 
@@ -27,6 +28,7 @@ public class Controller extends CVFXController{
 
 	@Override
 	protected void process(Mat f, Mat a, Mat b) {
+		Core.flip(f,f,1);
 		if(faceDetectActive) detectAndDisplay(f);
 	}
 
@@ -74,6 +76,18 @@ public class Controller extends CVFXController{
 			}
 
 		}
+
+		Rectangle2D sbounds = Screen.getPrimary().getVisualBounds();
+
+		Platform.runLater(() -> {
+			if (!faces.empty()) {
+				Rect facc = faces.toArray()[0];
+				double xpercent = ( facc.tl().x + facc.br().x) / 2 / frame.width();
+				double ypercent = ( facc.tl().y + facc.br().y ) / 2 / frame.height();
+				appstage.setX(sbounds.getWidth()*xpercent - appstage.getWidth()/2);
+				appstage.setY(sbounds.getHeight()*ypercent - appstage.getHeight()/2);
+			}
+		});
 
 
 	}
