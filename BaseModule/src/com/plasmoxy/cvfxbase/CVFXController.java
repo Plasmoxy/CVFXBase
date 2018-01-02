@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Paint;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -46,7 +47,7 @@ import java.util.concurrent.TimeUnit;
  * </ul>
  *
  * @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- * @version 1.3
+ * @version 1.4
  *
  */
 
@@ -493,14 +494,17 @@ public abstract class CVFXController {
             if (videoCapture.isOpened()) {
                 cameraActive = true;
                 startRendering();
+				cameraButton.setTextFill(Paint.valueOf("#faff00")); // set button to purple stop color
                 cameraButton.setText("Stop Camera");
             } else {
-                log("CANNOT OPEN CAMERA");
+                log("CANNOT OPEN CAMERA " + cameraID);
+                cameraButton.setTextFill(Paint.valueOf("#F44336")); // set button to red error color
                 cameraButton.setText("ERROR");
             }
 
         } else {
             stopRendering();
+			cameraButton.setTextFill(Paint.valueOf("#00ffd0")); // set button to cyan start color
             updateStartButtonText();
         }
     }
@@ -635,7 +639,7 @@ public abstract class CVFXController {
         timer.scheduleAtFixedRate(frameRenderer, 0, 33, TimeUnit.MILLISECONDS);
         
         updateInfoLabel();
-        log("Rendering started");
+        log("Rendering started - camera " + cameraID);
     }
     
     /**
@@ -655,7 +659,7 @@ public abstract class CVFXController {
         
         updateInfoLabel();
         
-        log("Rendering stopped");
+        log("Rendering stopped - camera " + cameraID);
 
         if (videoCapture.isOpened()) videoCapture.release();
     }

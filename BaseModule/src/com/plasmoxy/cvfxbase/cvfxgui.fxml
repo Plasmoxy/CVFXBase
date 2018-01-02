@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- FXML layout for CVFXApp by Plasmoxy, made in Gluon designer -->
+<!-- version: 1.4 -->
 <!-- IMPORTANT NOTE : Controller is assigned through code so no fx:controller attribute is present -->
 
 <?import com.jfoenix.controls.JFXButton?>
@@ -30,13 +31,13 @@
                      </BorderPane.margin>
                   </ImageView>
                </top>
-               <bottom>
+               <center>
                   <ImageView fx:id="imageViewBeta" fitHeight="240.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                      </BorderPane.margin>
                   </ImageView>
-               </bottom>
+               </center>
             </BorderPane>
          </right>
          <center>
@@ -60,7 +61,7 @@
          <children>
             <BorderPane maxHeight="-Infinity" prefHeight="80.0" prefWidth="250.0" style="-fx-border-color: white; -fx-border-radius: 10px;">
                <center>
-                  <JFXButton fx:id="cameraButton" onAction="#startCamera" prefHeight="50.0" prefWidth="146.0" style="-fx-background-color: #ddd;" text="Start Camera 0" BorderPane.alignment="CENTER">
+                  <JFXButton fx:id="cameraButton" onAction="#startCamera" prefHeight="50.0" prefWidth="146.0" style="-fx-background-color: #333;" text="Start Camera 0" textFill="#00ffd0" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="17.0" />
                      </font>
@@ -92,13 +93,13 @@
             </BorderPane>
             <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="110.0">
                <top>
-                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderMainAction" prefHeight="40.0" prefWidth="110.0" selected="true" text="MAIN" textFill="WHITE" BorderPane.alignment="CENTER" />
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderMainAction" prefHeight="40.0" prefWidth="110.0" selected="true" text="MAIN" textFill="WHITE" toggleColor="#d5ff06" toggleLineColor="#1dc3c4" BorderPane.alignment="CENTER" />
                </top>
                <center>
-                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderAlphaAction" prefHeight="40.0" prefWidth="110.0" text="ALPHA" textFill="WHITE" toggleColor="#ff00ae" toggleLineColor="#d6388e" BorderPane.alignment="CENTER" />
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderAlphaAction" prefHeight="40.0" prefWidth="110.0" text="ALPHA" textFill="WHITE" toggleColor="#ff00b6" toggleLineColor="#1dc3c4" BorderPane.alignment="CENTER" />
                </center>
                <bottom>
-                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderBetaAction" prefHeight="40.0" prefWidth="110.0" text="BETA" textFill="WHITE" toggleColor="#ff006f" toggleLineColor="#dd1a65" BorderPane.alignment="CENTER" />
+                  <JFXToggleButton maxHeight="-Infinity" minHeight="-Infinity" onAction="#renderBetaAction" prefHeight="40.0" prefWidth="110.0" text="BETA" textFill="WHITE" toggleColor="#7f0ee5" toggleLineColor="#1dc3c4" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
             <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0">
@@ -109,7 +110,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderA" />
+                        <JFXSlider fx:id="sliderA" style="-jfx-default-thumb: #E91E63;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -124,7 +125,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderB" />
+                        <JFXSlider fx:id="sliderB" style="-jfx-default-thumb: #F44336;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -139,7 +140,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderC" />
+                        <JFXSlider fx:id="sliderC" style="-jfx-default-thumb: #009688;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -154,7 +155,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderD" />
+                        <JFXSlider fx:id="sliderD" style="-jfx-default-thumb: #AA00FF;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -169,7 +170,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderE" />
+                        <JFXSlider fx:id="sliderE" style="-jfx-default-thumb: #3F51B5;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -184,7 +185,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderF" />
+                        <JFXSlider fx:id="sliderF" style="-jfx-default-thumb: #2196F3;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -199,7 +200,7 @@
                            <padding>
                               <Insets right="2.0" />
                            </padding></Label>
-                        <JFXSlider fx:id="sliderG" />
+                        <JFXSlider fx:id="sliderG" style="-jfx-default-thumb: #607D8B;" />
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -225,14 +226,14 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXToggleButton fx:id="toggleA" onAction="#toggleAAction" text="toggleA" textFill="WHITE" />
-                  <JFXToggleButton fx:id="toggleE" onAction="#toggleEAction" text="toggleE" textFill="WHITE" GridPane.columnIndex="1" />
-                  <JFXToggleButton fx:id="toggleH" onAction="#toggleHAction" text="toggleH" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <JFXToggleButton fx:id="toggleD" onAction="#toggleDAction" text="toggleD" textFill="WHITE" GridPane.rowIndex="3" />
-                  <JFXToggleButton fx:id="toggleG" onAction="#toggleGAction" text="toggleG" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <JFXToggleButton fx:id="toggleC" onAction="#toggleCAction" text="toggleC" textFill="WHITE" GridPane.rowIndex="2" />
-                  <JFXToggleButton fx:id="toggleF" onAction="#toggleFAction" text="toggleF" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <JFXToggleButton fx:id="toggleB" onAction="#toggleBAction" text="toggleB" textFill="WHITE" GridPane.rowIndex="1" />
+                  <JFXToggleButton fx:id="toggleA" onAction="#toggleAAction" text="toggleA" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#e91e63" />
+                  <JFXToggleButton fx:id="toggleE" onAction="#toggleEAction" text="toggleE" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#3f51b5" GridPane.columnIndex="1" />
+                  <JFXToggleButton fx:id="toggleH" onAction="#toggleHAction" text="toggleH" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#9e9e9e" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <JFXToggleButton fx:id="toggleD" onAction="#toggleDAction" text="toggleD" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#aa00ff" GridPane.rowIndex="3" />
+                  <JFXToggleButton fx:id="toggleG" onAction="#toggleGAction" text="toggleG" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#607d8b" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <JFXToggleButton fx:id="toggleC" onAction="#toggleCAction" text="toggleC" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#009688" GridPane.rowIndex="2" />
+                  <JFXToggleButton fx:id="toggleF" onAction="#toggleFAction" text="toggleF" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#2196f3" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXToggleButton fx:id="toggleB" onAction="#toggleBAction" text="toggleB" textFill="WHITE" toggleColor="WHITE" toggleLineColor="#f44336" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <GridPane alignment="CENTER" prefHeight="148.0" prefWidth="221.0">

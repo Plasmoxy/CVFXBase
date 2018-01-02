@@ -1,11 +1,10 @@
 package com.plasmoxy.cvfxbase;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
-import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
@@ -30,7 +29,7 @@ import java.net.URL;
  * </ol>
  *
  *  @author <a target="_blank" href="http://github.com/Plasmoxy">Plasmoxy</a>
- *  @version 1.3
+ *  @version 1.4
  */
 
 public abstract class CVFXApp extends Application {
@@ -39,7 +38,7 @@ public abstract class CVFXApp extends Application {
     /**
      * Version of the app.
      */
-    public static final String VERSION = "v1.3";
+    public static final String VERSION = "v1.4";
 
     // if this produces error, you dont have jfoenix library included !!!
     private static com.jfoenix.controls.JFXButton _JFOENIX_DETECTOR;
@@ -182,6 +181,8 @@ public abstract class CVFXApp extends Application {
         stg.setScene(mainscene);
         stg.sizeToScene();
         stg.setTitle(annotatedTitle + " [ CVFXBase " + VERSION + " ]");
+
+        stg.getIcons().add(new Image(CVFXApp.class.getResourceAsStream("cvfxicon.png"))); // load icon
         
         stg.setOnCloseRequest(event ->
         {
