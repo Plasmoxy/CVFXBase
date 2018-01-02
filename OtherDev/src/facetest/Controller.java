@@ -12,7 +12,6 @@ public class Controller extends CVFXController{
 
 	@Override
 	protected void init() {
-		hideAll();
 		show(buttonA);
 		buttonA.setText("Screenshot");
 	}
@@ -25,6 +24,8 @@ public class Controller extends CVFXController{
 			Imgcodecs.imwrite("screenshot.jpg", f);
 			screenshotTakingActive = false;
 		}
+		Core.flip(f, a, 1);
+		Core.flip(f, b, 0);
 	}
 
 	@Override
