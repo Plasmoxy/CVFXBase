@@ -17,8 +17,8 @@ public class Controller extends CVFXController {
 
 	@Override
 	protected void init() {
-		faceCascade.load(System.getProperty("user.dir") + "/haarcascade_frontalface_alt.xml");
-		eyeCascade.load(System.getProperty("user.dir") + "/haarcascade_eye.xml");
+		faceCascade.load(System.getProperty("user.dir") + "/res/haar/haarcascade_frontalface_alt.xml");
+		eyeCascade.load(System.getProperty("user.dir") + "/res/haar/haarcascade_eye.xml");
 
 		toggleA.setText("Detect face");
 
